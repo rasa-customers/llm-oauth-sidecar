@@ -70,7 +70,7 @@ class TokenManager:
 
 # Initialize
 app = Sanic("auth-proxy")
-#token_manager = TokenManager()
+token_manager = TokenManager()
 destination_url = os.getenv('API_BASE_URL').rstrip('/')
 timeout = aiohttp.ClientTimeout(total=120)
 
@@ -79,14 +79,14 @@ async def proxy_all(request: Request, path: str):
     """Proxy all requests to destination with auth token"""
     
     # Get fresh token
-    #access_token = token_manager.get_token()
+    access_token = token_manager.get_token()
     
     # Build target URL
     target_url = f"{destination_url}/{path}"
     # Copy headers and add auth
     headers = dict(request.headers)
     
-    #headers['Authorization'] = f'Bearer {access_token}'
+    headers['Authorization'] = f'Bearer {access_token}'
     
     # Remove hop-by-hop headers
     for h in ['host', 'content-length', 'connection']:
